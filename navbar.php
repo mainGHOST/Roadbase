@@ -26,6 +26,9 @@ $user_role = $_SESSION['user_type'] ?? 'guest'; // Get the user role from the se
                     <li class="nav-item px-1">
                         <a class="nav-link" href="view_available_drivers.php">Drivers</a>
                     </li>
+                    <li class="nav-item px-1">
+                        <a class="nav-link" href="payment.php">Payment</a>
+                    </li>
                 </ul>
                 <a href="notification.php"><i class="fa-regular fa-bell text-info fs-5 px-3"></i></a>
                 <a href="logout.php" class="d-flex btn btn-outline-danger mx-2">Logout</a>

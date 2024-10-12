@@ -61,7 +61,7 @@ require 'config/database.php';
                 </div>
             </div>
         </div>
-        <p class="d-flex justify-content-center"> Already have an account? <a href="index.php">Login</a></p>
+        <p class="d-flex justify-content-center"> Already have an account? <a href="signin.php">Login</a></p>
     </div>
 </body>
 

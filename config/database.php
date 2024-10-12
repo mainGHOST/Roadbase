@@ -11,4 +11,6 @@ try {
 } catch (PDOException $e) {
     die("Could not connect to the database: " . $e->getMessage());
 }
+
+$con = mysqli_connect($host, $user, $pass, $dbname);
 ?>
