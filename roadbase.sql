@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 07, 2024 at 07:20 PM
+-- Generation Time: Oct 20, 2024 at 02:04 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,15 +35,18 @@ CREATE TABLE `drivers` (
   `vehicle_info` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `status` enum('available','on_ride','offline') DEFAULT 'available',
-  `is_available` tinyint(1) DEFAULT 1
+  `is_available` tinyint(1) DEFAULT 1,
+  `wallet_balance` decimal(10,2) DEFAULT 0.00,
+  `bank_account_number` varchar(20) DEFAULT NULL,
+  `bank_name` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `drivers`
 --
 
-INSERT INTO `drivers` (`id`, `name`, `email`, `phone`, `vehicle_info`, `password`, `status`, `is_available`) VALUES
-(1, 'Oluwadamilola David Ogunnaike', 'bola@gmail.com', '08108845182', '12199010002', '$2y$10$2aXjHTvA113eKSafEPpKi.uk0VpfSfZZCI4kGCP82KpvPRe4N/UOy', 'available', 1);
+INSERT INTO `drivers` (`id`, `name`, `email`, `phone`, `vehicle_info`, `password`, `status`, `is_available`, `wallet_balance`, `bank_account_number`, `bank_name`) VALUES
+(1, 'Oluwadamilola David Ogunnaike', 'bola@gmail.com', '08108845182', '12199010002', '$2y$10$2aXjHTvA113eKSafEPpKi.uk0VpfSfZZCI4kGCP82KpvPRe4N/UOy', 'on_ride', 1, 0.00, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -93,7 +96,7 @@ INSERT INTO `notifications` (`id`, `user_id`, `message`, `is_read`, `created_at`
 (1, 1, 'Your ride has been booked successfully!', 1, '2024-10-06 14:31:14'),
 (2, 1, 'Your ride has been booked successfully!', 1, '2024-10-06 14:39:33'),
 (3, 1, 'Your ride has been booked successfully!', 1, '2024-10-06 15:59:28'),
-(4, 1, 'Your ride has been booked successfully!', 0, '2024-10-06 18:33:26'),
+(4, 1, 'Your ride has been booked successfully!', 1, '2024-10-06 18:33:26'),
 (5, 2, 'Your ride has been booked successfully!', 1, '2024-10-06 19:00:39'),
 (6, 2, 'Your ride has been booked successfully!', 1, '2024-10-06 19:19:49'),
 (7, 2, 'Your ride has been booked successfully!', 1, '2024-10-06 19:22:41'),
@@ -118,15 +121,18 @@ CREATE TABLE `passengers` (
   `email` varchar(100) DEFAULT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `address` text DEFAULT NULL,
-  `password` varchar(255) DEFAULT NULL
+  `password` varchar(255) DEFAULT NULL,
+  `payment_status` enum('pending','completed') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `passengers`
 --
 
-INSERT INTO `passengers` (`id`, `name`, `email`, `phone`, `address`, `password`) VALUES
-(1, 'Ogunnaike Oluwadamilola', 'kemi@gmail.com', '08108845182', '21, Onalaga Street, Off degun', '$2y$10$rvUX07HOdABBIkYbUAMgEejYgpUdryo/TfGZR3128e/utVzJxOf.S');
+INSERT INTO `passengers` (`id`, `name`, `email`, `phone`, `address`, `password`, `payment_status`) VALUES
+(1, 'Ogunnaike Oluwadamilola', 'kemi@gmail.com', '08108845182', '21, Onalaga Street, Off degun', '$2y$10$rvUX07HOdABBIkYbUAMgEejYgpUdryo/TfGZR3128e/utVzJxOf.S', 'pending'),
+(2, 'Oluwadamilola David Ogunnaike', 'tolu@gmail.com', '08108845182', '9, Adebisi street, onirigba, ijebu ode', '$2y$10$voQ9Zft7WKqOwFrDqznqu.ouoR/0RD6IwNfhTfFW4WKtZ7fiGlfD.', 'pending'),
+(3, 'Oluwadamilola David', 'doluwadamilola68@gmail.com', '09138838212', '9, Adebisi street, onirigba, ijebu ode', '$2y$10$JFAwi4p90Lo3OWZLhHw8Q.QBi0JCY0AP32m81BB.Y5DMtKmTA48Pq', 'pending');
 
 -- --------------------------------------------------------
 
@@ -212,15 +218,35 @@ CREATE TABLE `ride_requests` (
   `pickup_location` varchar(255) DEFAULT NULL,
   `dropoff_location` varchar(255) DEFAULT NULL,
   `status` enum('pending','accepted','completed','canceled') DEFAULT 'pending',
-  `date` timestamp NOT NULL DEFAULT current_timestamp()
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `payment_status` enum('pending','completed') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `ride_requests`
 --
 
-INSERT INTO `ride_requests` (`id`, `passenger_id`, `driver_id`, `pickup_location`, `dropoff_location`, `status`, `date`) VALUES
-(1, 1, 1, NULL, NULL, 'completed', '2024-10-07 17:16:38');
+INSERT INTO `ride_requests` (`id`, `passenger_id`, `driver_id`, `pickup_location`, `dropoff_location`, `status`, `date`, `payment_status`) VALUES
+(1, 1, 1, NULL, NULL, 'completed', '2024-10-07 17:16:38', 'pending'),
+(2, 1, 1, NULL, NULL, 'completed', '2024-10-08 19:54:14', 'pending'),
+(3, 1, 1, NULL, NULL, 'completed', '2024-10-09 08:49:49', 'pending'),
+(4, 1, 1, NULL, NULL, 'completed', '2024-10-09 16:44:37', 'pending'),
+(5, 1, 1, NULL, NULL, 'accepted', '2024-10-11 14:07:10', 'pending');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `id` int(11) NOT NULL,
+  `driver_id` int(11) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  `type` enum('credit','debit') DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -313,6 +339,13 @@ ALTER TABLE `ride_requests`
   ADD KEY `driver_id` (`driver_id`);
 
 --
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `driver_id` (`driver_id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -345,7 +378,7 @@ ALTER TABLE `notifications`
 -- AUTO_INCREMENT for table `passengers`
 --
 ALTER TABLE `passengers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `ratings`
@@ -369,7 +402,13 @@ ALTER TABLE `ride_history`
 -- AUTO_INCREMENT for table `ride_requests`
 --
 ALTER TABLE `ride_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -422,6 +461,12 @@ ALTER TABLE `ride_history`
 ALTER TABLE `ride_requests`
   ADD CONSTRAINT `ride_requests_ibfk_1` FOREIGN KEY (`passenger_id`) REFERENCES `passengers` (`id`),
   ADD CONSTRAINT `ride_requests_ibfk_2` FOREIGN KEY (`driver_id`) REFERENCES `drivers` (`id`);
+
+--
+-- Constraints for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`driver_id`) REFERENCES `drivers` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
